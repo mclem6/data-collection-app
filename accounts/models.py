@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+import secrets
+from datetime import timedelta
+from django.contrib.auth.hashers import check_password, make_password
+from django.utils import timezone
 
 #manager for user model
 class UserManager(BaseUserManager):
@@ -8,7 +12,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Email is required")
-        email = self.normalize_email(email)
+        email = self.normalize_email(email).lower()
         user = self.model(email=email, **extra_fields)
 
         if password:
@@ -49,3 +53,34 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class LoginCode(models.Model):
+    LIFETIME = timedelta(minutes=10)
+    MAX_ATTEMPTS = 5
+
+    email = models.EmailField()
+    code_hash = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    used = models.BooleanField(default=False)
+
+    @classmethod
+    def issue(cls, email):
+        """Create a new code for this email and return the plain code."""
+        code = f"{secrets.randbelow(1_000_000):06d}"
+        cls.objects.filter(email=email, used=False).update(used=True)  # retire older codes
+        cls.objects.create(email=email, code_hash=make_password(code))
+        return code
+
+    def is_valid(self):
+        return (
+            not self.used
+            and self.attempts < self.MAX_ATTEMPTS
+            and timezone.now() - self.created_at < self.LIFETIME
+        )
+
+    def verify(self, code):
+        self.attempts += 1
+        self.save(update_fields=["attempts"])
+        return check_password(code, self.code_hash)
