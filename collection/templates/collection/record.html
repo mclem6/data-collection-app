@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Record</title>
+</head>
+<body>
+  <form method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+  </form>
+
+  <p>Your submissions so far: {{ count }}</p>
+
+  {% if prompt %}
+    <h2>Record yourself saying this in Dinka, then type what you said:</h2>
+    <p><strong>{{ prompt.text }}</strong></p>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Submit</button>
+    </form>
+
+    <form method="post" action="{% url 'skip' %}">
+      {% csrf_token %}
+      <button type="submit">Skip this prompt</button>
+    </form>
+
+    <style>
+    #dinka-keys button { font-size: 1.25rem; min-width: 2.5rem; margin: 2px; }
+  </style>
+  <script>
+    // ä ë ɛ ɛ̈ ï ö ɔ ɔ̈ ŋ ɣ (written as codes so they never get mangled)
+    const DINKA_KEYS = [
+      "\u00e4", "\u00eb", "\u025b", "\u025b\u0308", "\u00ef",
+      "\u00f6", "\u0254", "\u0254\u0308", "\u014b", "\u0263",
+    ];
+
+    const field = document.getElementById("id_transcription");
+    const bar = document.createElement("div");
+    bar.id = "dinka-keys";
+    let upper = false;
+
+    function makeButton(label, onClick) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = label;
+      btn.addEventListener("mousedown", (e) => e.preventDefault()); // keep focus in the text box
+      btn.addEventListener("click", onClick);
+      return btn;
+    }
+
+    function insert(text) {
+      field.setRangeText(text, field.selectionStart, field.selectionEnd, "end");
+      field.focus();
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    function render() {
+      bar.innerHTML = "";
+      DINKA_KEYS.forEach((ch) => {
+        const label = upper ? ch.toUpperCase() : ch;
+        bar.appendChild(makeButton(label, () => insert(label)));
+      });
+      bar.appendChild(makeButton("Aa", () => { upper = !upper; render(); }));
+    }
+
+    field.insertAdjacentElement("afterend", bar);
+    render();
+  </script>
+  {% else %}
+    <p>You've done every prompt available right now. Thank you!</p>
+  {% endif %}
+</body>
+</html>

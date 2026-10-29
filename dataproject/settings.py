@@ -135,4 +135,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # One-time login code settings
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "noreply@localhost"
+
+# Login and logout settings
 LOGIN_URL = "accounts:login"
+LOGOUT_REDIRECT_URL = "accounts:login"
