@@ -1,3 +1,6 @@
+
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -69,6 +72,7 @@
     field.insertAdjacentElement("afterend", bar);
     render();
   </script>
+  <script src="{% static 'collection/recorder.js' %}"></script>
   {% else %}
     <p>You've done every prompt available right now. Thank you!</p>
   {% endif %}
