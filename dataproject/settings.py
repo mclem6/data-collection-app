@@ -143,7 +143,10 @@ if AWS_STORAGE_BUCKET_NAME:
 
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@localhost")
 
-if not DEBUG:
+
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
     EMAIL_BACKEND = "django_ses.SESBackend"
     AWS_SES_REGION_NAME = os.environ.get("AWS_REGION", "us-east-1")
     AWS_SES_REGION_ENDPOINT = f"email.{AWS_SES_REGION_NAME}.amazonaws.com"
@@ -167,9 +170,6 @@ AUTH_USER_MODEL = "accounts.User"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# One-time login code settings
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@localhost"
 
 # Login and logout settings
 LOGIN_URL = "accounts:login"
