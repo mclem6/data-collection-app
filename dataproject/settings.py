@@ -174,3 +174,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Login and logout settings
 LOGIN_URL = "accounts:login"
 LOGOUT_REDIRECT_URL = "accounts:login"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": "INFO"},
+    "loggers": {
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+    },
+}
