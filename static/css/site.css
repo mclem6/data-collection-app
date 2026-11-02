@@ -1,0 +1,138 @@
+:root {
+  --bg: #fbf6ee;
+  --card: #fffdf9;
+  --text: #2b2118;
+  --muted: #6b5b4d;
+  --border: #e4d8c7;
+  --primary: #b4492d;
+  --green: #2f6b4f;
+  --gold: #e0a526;
+  --error: #a32a1f;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(43, 33, 24, 0.08), 0 4px 12px rgba(43, 33, 24, 0.06);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+h1, .brand, .prompt-text {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Noto Serif", serif;
+}
+
+a { color: var(--primary); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* header and footer */
+.site-header { background: var(--primary); color: #fff; }
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+.brand { color: #fff; font-size: 1.3rem; font-weight: 700; text-decoration: none; }
+.tagline { display: none; margin-left: 0.75rem; font-size: 0.95rem; opacity: 0.9; }
+.site-footer { margin-top: auto; padding: 1.5rem 1rem; text-align: center; color: var(--muted); font-size: 0.95rem; }
+
+/* layout */
+.container { width: 100%; max-width: 40rem; margin: 0 auto; padding: 1.25rem 1rem; }
+h1 { margin: 0.25rem 0 0.5rem; font-size: 1.75rem; line-height: 1.2; }
+.intro { margin: 0 0 1.25rem; color: var(--muted); }
+.count { margin: 0 0 1rem; color: var(--muted); font-size: 0.95rem; }
+
+/* forms */
+form p { margin: 0 0 1rem; }
+label { display: block; margin-bottom: 0.3rem; font-weight: 600; }
+input[type="text"], input[type="email"], input[type="file"], select, textarea {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+textarea { min-height: 6.5rem; resize: vertical; }
+.errorlist { margin: 0 0 0.5rem; padding: 0; list-style: none; color: var(--error); font-weight: 600; }
+
+/* buttons */
+button {
+  min-height: 48px;
+  padding: 0.5rem 1.1rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+button.primary { width: 100%; font-weight: 700; color: #fff; background: var(--primary); border-color: var(--primary); }
+button.secondary { width: 100%; background: transparent; }
+.link-button { min-height: 44px; color: #fff; background: none; border: none; text-decoration: underline; }
+
+/* recording page */
+.record-layout { display: grid; gap: 1.25rem; }
+.prompt-card {
+  margin: 0;
+  padding: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 6px solid var(--gold);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.prompt-label { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.95rem; }
+.prompt-text { margin: 0; font-size: 1.5rem; font-weight: 600; line-height: 1.35; }
+
+/* recorder */
+#rec-status { margin: 0 0 0.6rem; color: var(--muted); }
+#rec-start, #rec-stop, #rec-redo { width: 100%; margin-bottom: 0.6rem; font-weight: 700; }
+#rec-start { color: #fff; background: var(--green); border-color: var(--green); }
+#rec-stop { color: #fff; background: var(--error); border-color: var(--error); }
+#rec-playback { width: 100%; margin: 0.4rem 0 1rem; }
+
+/* dinka keyboard */
+#dinka-keys { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+#dinka-keys button { min-width: 2.9rem; padding: 0.3rem 0.6rem; font-size: 1.3rem; background: #f3e8d6; }
+
+/* wider screens */
+@media (min-width: 40rem) {
+  .tagline { display: inline; }
+}
+
+/* landscape: prompt on the left, form on the right */
+@media (min-width: 700px) and (orientation: landscape) {
+  .container { max-width: 60rem; }
+  .record-layout {
+    grid-template-columns: 1fr 1.3fr;
+    grid-template-areas: "prompt form" "skip form";
+    align-items: start;
+    column-gap: 1.75rem;
+  }
+  .prompt-card { grid-area: prompt; }
+  .record-form { grid-area: form; }
+  .skip-form { grid-area: skip; }
+}
+
+/* short screens, like a phone on its side */
+@media (max-height: 500px) {
+  .container { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .prompt-text { font-size: 1.25rem; }
+  textarea { min-height: 4.5rem; }
+}

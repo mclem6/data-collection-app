@@ -27,14 +27,15 @@ def request_code(request):
         else:
             code = LoginCode.issue(email)
             send_mail(
-                "Your sign-in code",
-                f"Your code is {code}. It expires in 10 minutes.",
+                "Your Data Potluck sign-in code",
+                f"Your Data Potluck sign-in code is {code}.\n\n"
+                "It expires in 10 minutes. If you didn't request this, you can ignore this email.",
                 None,
                 [email],
             )
             request.session["login_email"] = email
             return redirect("accounts:verify")
-    return render(request, "accounts/form.html", {"title": "Sign in", "form": form, "button": "Send code"})
+    return render(request, "accounts/form.html", {"title": "Sign in", "form": form, "button": "Send code", "intro": "Enter your email and we'll send you a 6-digit code. No password needed."})
 
 
 def verify_code(request):
@@ -56,7 +57,7 @@ def verify_code(request):
                 return redirect("home" if user.name else "accounts:onboarding")
         else:
             form.add_error("code", "That code is wrong or expired. Go back and request a new one.")
-    return render(request, "accounts/form.html", {"title": "Enter your code", "form": form, "button": "Sign in"})
+    return render(request, "accounts/form.html", {"title": "Enter your code", "form": form, "button": "Sign in", "intro": f"We sent a code to {email}. It expires in 10 minutes."})
 
 
 @login_required
@@ -67,4 +68,4 @@ def onboarding(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("home")
-    return render(request, "accounts/form.html", {"title": "Tell us about you", "form": form, "button": "Continue"})
+    return render(request, "accounts/form.html", {"title": "Tell us about you", "form": form, "button": "Continue", "intro": "Tell us a little about you. You'll only do this once, and your name can't be changed afterward, so please check it."})

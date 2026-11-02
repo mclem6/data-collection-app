@@ -1,15 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>{{ title }}</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | Data Potluck{% endblock %}
+
+{% block content %}
   <h1>{{ title }}</h1>
+  {% if intro %}<p class="intro">{{ intro }}</p>{% endif %}
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{{ button }}</button>
+    <button type="submit" class="primary">{{ button }}</button>
   </form>
-</body>
-</html>
+{% endblock %}

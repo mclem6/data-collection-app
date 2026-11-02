@@ -1,80 +1,78 @@
-
+{% extends "base.html" %}
 {% load static %}
 
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Record</title>
-</head>
-<body>
-  <form method="post" action="{% url 'accounts:logout' %}">
-    {% csrf_token %}
-    <button type="submit">Log out</button>
-  </form>
+{% block title %}Record | Data Potluck{% endblock %}
 
-  <p>Your submissions so far: {{ count }}</p>
+{% block content %}
+  <p class="count">You've shared {{ count }} recording{{ count|pluralize }} so far.</p>
 
   {% if prompt %}
-    <h2>Record yourself saying this in Dinka, then type what you said:</h2>
-    <p><strong>{{ prompt.text }}</strong></p>
+    <div class="record-layout">
+      <section class="prompt-card">
+        <p class="prompt-label">Record yourself saying this in Dinka, then type what you said:</p>
+        <p class="prompt-text">{{ prompt.text }}</p>
+      </section>
 
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Submit</button>
-    </form>
+      <form method="post" enctype="multipart/form-data" class="record-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="primary">Submit</button>
+      </form>
 
-    <form method="post" action="{% url 'skip' %}">
-      {% csrf_token %}
-      <button type="submit">Skip this prompt</button>
-    </form>
-
-    <style>
-    #dinka-keys button { font-size: 1.25rem; min-width: 2.5rem; margin: 2px; }
-  </style>
-  <script>
-    // ä ë ɛ ɛ̈ ï ö ɔ ɔ̈ ŋ ɣ (written as codes so they never get mangled)
-    const DINKA_KEYS = [
-      "\u00e4", "\u00eb", "\u025b", "\u025b\u0308", "\u00ef",
-      "\u00f6", "\u0254", "\u0254\u0308", "\u014b", "\u0263",
-    ];
-
-    const field = document.getElementById("id_transcription");
-    const bar = document.createElement("div");
-    bar.id = "dinka-keys";
-    let upper = false;
-
-    function makeButton(label, onClick) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.textContent = label;
-      btn.addEventListener("mousedown", (e) => e.preventDefault()); // keep focus in the text box
-      btn.addEventListener("click", onClick);
-      return btn;
-    }
-
-    function insert(text) {
-      field.setRangeText(text, field.selectionStart, field.selectionEnd, "end");
-      field.focus();
-      field.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-
-    function render() {
-      bar.innerHTML = "";
-      DINKA_KEYS.forEach((ch) => {
-        const label = upper ? ch.toUpperCase() : ch;
-        bar.appendChild(makeButton(label, () => insert(label)));
-      });
-      bar.appendChild(makeButton("Aa", () => { upper = !upper; render(); }));
-    }
-
-    field.insertAdjacentElement("afterend", bar);
-    render();
-  </script>
-  <script src="{% static 'collection/recorder.js' %}"></script>
+      <form method="post" action="{% url 'skip' %}" class="skip-form">
+        {% csrf_token %}
+        <button type="submit" class="secondary">Skip this one</button>
+      </form>
+    </div>
   {% else %}
-    <p>You've done every prompt available right now. Thank you!</p>
+    <h1>Thank you!</h1>
+    <p class="intro">You've done every prompt available right now. Check back soon for more.</p>
   {% endif %}
-</body>
-</html>
+{% endblock %}
+
+{% block scripts %}
+  {% if prompt %}
+    <script>
+      // ä ë ɛ ɛ̈ ï ö ɔ ɔ̈ ŋ ɣ (written as codes so they never get mangled)
+      const DINKA_KEYS = [
+        "\u00e4", "\u00eb", "\u025b", "\u025b\u0308", "\u00ef",
+        "\u00f6", "\u0254", "\u0254\u0308", "\u014b", "\u0263",
+      ];
+
+      const field = document.getElementById("id_transcription");
+      const bar = document.createElement("div");
+      bar.id = "dinka-keys";
+      let upper = false;
+
+      function makeButton(label, onClick) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = label;
+        btn.addEventListener("mousedown", (e) => e.preventDefault()); // keep focus in the text box
+        btn.addEventListener("click", onClick);
+        return btn;
+      }
+
+      function insert(text) {
+        field.setRangeText(text, field.selectionStart, field.selectionEnd, "end");
+        field.focus();
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+
+      function render() {
+        bar.innerHTML = "";
+        DINKA_KEYS.forEach((ch) => {
+          const label = upper ? ch.toUpperCase() : ch;
+          bar.appendChild(makeButton(label, () => insert(label)));
+        });
+        bar.appendChild(makeButton("Aa", () => { upper = !upper; render(); }));
+      }
+
+      field.insertAdjacentElement("afterend", bar);
+      render();
+      </script>
+    <script src="{% static 'collection/recorder.js' %}"></script>
+  {% endif %}
+{% endblock %}
+
+
