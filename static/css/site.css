@@ -136,3 +136,50 @@ button.secondary { width: 100%; background: transparent; }
   .prompt-text { font-size: 1.25rem; }
   textarea { min-height: 4.5rem; }
 }
+
+/* centered auth pages */
+body.auth-page { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+body.auth-page main { flex: 1; display: flex; align-items: center; justify-content: center; }
+
+.auth-layout { width: 100%; max-width: 52rem; display: grid; gap: 1.25rem; text-align: center; }
+.auth-title { margin: 0; font-size: 1.75rem; line-height: 1.2; text-wrap: balance; }
+.auth-panel { width: 100%; max-width: 24rem; margin: 0 auto; }
+.auth-intro { margin: 0 0 1.25rem; color: var(--muted, #5f6b76); }
+.auth-panel form p { margin: 0 0 0.75rem; text-align: left; }
+.auth-panel input { padding: 0.55rem 0.7rem; }
+.auth-panel button.primary { width: auto; min-width: 11rem; }
+.auth-hint { margin: 1rem 0 0; font-size: 0.9rem; color: var(--muted, #5f6b76); }
+
+/* two columns on wide screens, including a phone on its side */
+@media (min-width: 700px) {
+  .auth-layout { grid-template-columns: 1fr 1fr; align-items: center; gap: 0; text-align: left; }
+  .auth-title { padding-right: 2.5rem; font-size: 2.25rem; text-align: right; }
+  .auth-panel { margin: 0; max-width: none; padding-left: 2.5rem; border-left: 1px solid var(--border, #d5d0c8); }
+}
+
+@media (max-height: 500px) {
+  .auth-title { font-size: 1.5rem; }
+  .auth-intro { margin-bottom: 0.75rem; }
+  .auth-panel input { padding: 0.4rem 0.6rem; }
+}
+
+.prose { max-width: 40rem; margin: 0 auto; }
+.prose h1 { margin-bottom: 0.5rem; }
+.prose h2 { font-size: 1.2rem; margin: 1.75rem 0 0.5rem; }
+.prose ul { padding-left: 1.25rem; }
+.prose li { margin-bottom: 0.6rem; }
+
+
+.site-nav { display: flex; align-items: center; gap: 1rem; }
+.site-nav form { margin: 0; }
+.site-nav a,
+.site-nav .link-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: inherit;
+  color: #fff;
+  text-decoration: none;
+}
+.site-nav a:hover,
+.site-nav .link-button:hover { text-decoration: underline; }
