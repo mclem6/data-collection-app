@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<div class="auth-stack">
+  <div class="auth-layout auth-layout--login">
+    <h1 class="auth-title">{{ title }}</h1>
+
+    <section class="auth-steps">
+      {% if intro %}<p class="auth-intro">{{ intro }}</p>{% endif %}
+    </section>
+
+    <section class="auth-panel">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="primary">{{ button }}</button>
+      </form>
+        {% if hint %}<p class="auth-hint">{{ hint }}</p>{% endif %}
+    </section>
+  </div>
+  <section id="about" class="about-section">
+    {% include "_about.html" %}
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll(".flip-card").forEach(function (card) {
+    var front = card.querySelector(".flip-front");
+    var back = card.querySelector(".flip-back");
+    back.inert = true;
+
+    function flip(open) {
+      card.classList.toggle("is-flipped", open);
+      front.inert = open;
+      back.inert = !open;
+      (open ? card.querySelector(".flip-close") : front).focus();
+    }
+
+    front.addEventListener("click", function () { flip(true); });
+    card.querySelector(".flip-close").addEventListener("click", function () { flip(false); });
+  });
+</script>
+{% endblock %}

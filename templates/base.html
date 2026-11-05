@@ -17,7 +17,6 @@
         <span class="tagline">Crowdsourced data collection project</span>
       </div>
       <nav class="site-nav">
-        <a href="{% url 'about' %}">About</a>
         {% if user.is_authenticated %}
           <form method="post" action="{% url 'accounts:logout' %}">
             {% csrf_token %}

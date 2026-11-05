@@ -36,10 +36,10 @@ def request_code(request):
             )
             request.session["login_email"] = email
             return redirect("accounts:verify")
-    return render(request, "accounts/form.html", {
+    return render(request, "accounts/login.html", {
     "title": "Welcome to Data\u00a0Potluck",
     "intro": "We're collecting Dinka recordings to build a Dinka-English speech model. "
-             "You'll see a sentence in English, say it in Dinka, and type what you said.",
+             "You'll see a sentence in English, say it in Dinka, and transcribe what you said.",
     "form": form,
     "button": "Email me a code",
     "hint": "New or returning, it's the same step. We'll email you a 6-digit code. No password needed.",

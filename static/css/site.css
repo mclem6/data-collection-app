@@ -139,7 +139,8 @@ button.secondary { width: 100%; background: transparent; }
 
 /* centered auth pages */
 body.auth-page { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
-body.auth-page main { flex: 1; display: flex; align-items: center; justify-content: center; }
+body.auth-page main { flex: 1; display: flex; align-items: center; justify-content: center; max-width: 80rem; }
+body.auth-page .header-inner { max-width: 80rem; }
 
 .auth-layout { width: 100%; max-width: 52rem; display: grid; gap: 1.25rem; text-align: center; }
 .auth-title { margin: 0; font-size: 1.75rem; line-height: 1.2; text-wrap: balance; }
@@ -183,3 +184,91 @@ body.auth-page main { flex: 1; display: flex; align-items: center; justify-conte
 }
 .site-nav a:hover,
 .site-nav .link-button:hover { text-decoration: underline; }
+
+/*  login page */
+.auth-layout--login { max-width: 64rem; min-height: 75dvh; align-content: center; margin: 0 auto; }
+.auth-steps p { margin: 0; }
+
+@media (min-width: 700px) {
+  .auth-layout--login { grid-template-columns: 1fr 1fr 1fr; align-items: stretch;}
+  .auth-layout--login .auth-title { padding-right: 2rem; text-align: left; }
+  .auth-layout--login .auth-steps { padding: 0 2rem; border-left: 1px solid var(--border); }
+  .auth-layout--login .auth-panel { padding-left: 2rem; }
+  .auth-layout--login > * { display: flex; flex-direction: column; justify-content: center; }
+}
+
+
+/* about section styling */
+html { scroll-behavior: smooth; }
+
+.auth-stack { width: 100%; max-width: 80rem; }
+.about-section { padding-top: 1.5rem; }
+.about-section::before { content: ""; display: block; width: 4rem; height: 1px; margin: 0 auto 1.5rem; background: var(--border, #d5d0c8); }
+.prose .about-title { margin-top: 0; font-size: 1.75rem; text-align: center; }
+
+/* about flip cards */
+.prose.about { max-width: none; }
+.flip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr)); gap: 1.25rem; }
+
+.flip-card { position: relative; height: 18rem; perspective: 1000px; }
+.flip-face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.5s;
+}
+.flip-front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.flip-card:nth-child(3n+1) .flip-front { background: var(--primary); border-color: var(--primary); color: #fff; }
+.flip-card:nth-child(3n+2) .flip-front { background: var(--green); border-color: var(--green); color: #fff; }
+.flip-card:nth-child(3n) .flip-front { background: var(--gold); border-color: var(--gold); color: var(--text); }
+.flip-front:hover { filter: brightness(1.08); }
+
+.flip-back {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.1rem;
+  overflow-y: auto;
+  font-size: 0.95rem;
+  transform: rotateY(180deg);
+}
+.flip-back p, .flip-back ul { margin: 0 0 0.75rem; }
+.flip-close { align-self: flex-start; margin-top: auto; min-height: 36px; padding: 0.25rem 0.8rem; }
+
+.flip-card.is-flipped .flip-front { transform: rotateY(-180deg); }
+.flip-card.is-flipped .flip-back { transform: rotateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-face { transition: none; }
+}
+
+
+/* add background image to login page auth section */
+.auth-layout--login { position: relative; isolation: isolate; }
+.auth-layout--login::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  z-index: -1;
+  background: var(--bg) url("../img/login-bg.jpg") center / cover no-repeat;
+  background-blend-mode: multiply;
+  opacity: 0.3;
+}
+body.auth-page { overflow-x: clip; }
+
