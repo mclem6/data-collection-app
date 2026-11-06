@@ -27,6 +27,14 @@ class Submission(models.Model):
     dialect = models.CharField(max_length=20, choices=Dialect.choices)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
+    reviewed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="reviewed_submissions",
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Submission {self.pk} by {self.contributor}"

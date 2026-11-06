@@ -199,7 +199,6 @@ body.auth-page .header-inner { max-width: 80rem; }
 
 
 /* about section styling */
-html { scroll-behavior: smooth; }
 
 .auth-stack { width: 100%; max-width: 80rem; }
 .about-section { padding-top: 1.5rem; }
